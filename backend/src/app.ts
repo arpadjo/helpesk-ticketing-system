@@ -1,16 +1,22 @@
 import cors from 'cors';
 import express from 'express';
+import type { PrismaClient } from './generated/prisma/client.js';
 
-export const app = express();
+import { errorHandler } from './middleware/error-handler.js';
+import { createTicketRouter } from './routes/tickets.js';
 
-app.use(cors());
-app.use(express.json());
+export const createApp = (prisma: PrismaClient) => {
+  const app = express();
 
-app.get('/api/hello', (_request, response) => {
-  response.json({ message: 'Hello from the Helpdesk API!' });
-});
+  app.use(cors());
+  app.use(express.json());
 
-app.get('/api/health', (_request, response) => {
-  response.json({ status: 'ok' });
-});
+  app.get('/api/v1/health', (_request, response) => {
+    response.json({ status: 'ok' });
+  });
 
+  app.use('/api/v1/tickets', createTicketRouter(prisma));
+  app.use(errorHandler);
+
+  return app;
+};

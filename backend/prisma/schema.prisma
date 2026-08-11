@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TicketStatus {
+  open
+  in_progress
+  resolved
+  closed
+}
+
+model Ticket {
+  id           BigInt       @id @default(autoincrement())
+  ticketNumber BigInt       @unique @default(autoincrement()) @map("ticket_number")
+  title        String       @db.VarChar(200)
+  description  String
+  requester    String       @db.VarChar(200)
+  status       TicketStatus @default(open)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  comments     Comment[]
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("tickets")
+}
+
+model Comment {
+  id        BigInt   @id @default(autoincrement())
+  ticketId  BigInt   @map("ticket_id")
+  author    String   @db.VarChar(200)
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("comments")
+}
+

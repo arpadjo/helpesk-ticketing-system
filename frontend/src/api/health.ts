@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { getJson } from './client';
+import { requestJson } from './client';
 
 const healthResponseSchema = z.object({
   status: z.literal('ok'),
@@ -9,5 +9,4 @@ const healthResponseSchema = z.object({
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 
 export const fetchHealth = (): Promise<HealthResponse> =>
-  getJson('/api/health', healthResponseSchema);
-
+  requestJson('/health', healthResponseSchema);
