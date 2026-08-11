@@ -4,8 +4,8 @@ Built with Express.js, React, TypeScript, and PostgreSQL, Docker.
 
 ## Stack
 
-- Backend: Express.js, TypeScript, PostgreSQL
-- Frontend: React, TypeScript, Vite
+- Backend: Express.js, TypeScript, PostgreSQL, Zod
+- Frontend: React, TypeScript, Vite, TanStack Query, Zod
 - Infrastructure: Docker Compose for the backend and database
 
 ## Run the backend and database
